@@ -9,7 +9,7 @@ Summary:	WSGI Proxy with various HTTP client backends
 Summary(pl.UTF-8):	Proxy WSGI z różnymi backendami klienta HTTP
 Name:		python-WSGIProxy2
 Version:	0.4.4
-Release:	5
+Release:	6
 License:	MIT
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/wsgiproxy2/
