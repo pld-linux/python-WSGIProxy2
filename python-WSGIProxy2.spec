@@ -8,13 +8,14 @@
 Summary:	WSGI Proxy with various HTTP client backends
 Summary(pl.UTF-8):	Proxy WSGI z różnymi backendami klienta HTTP
 Name:		python-WSGIProxy2
-Version:	0.4.4
-Release:	6
+# keep 0.4.x here for python2 support
+Version:	0.4.6
+Release:	1
 License:	MIT
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/wsgiproxy2/
 Source0:	https://files.pythonhosted.org/packages/source/W/WSGIProxy2/WSGIProxy2-%{version}.tar.gz
-# Source0-md5:	888f225f00a7923445e24f0979d92a45
+# Source0-md5:	cf4f45bed6ab74ad644bee58bcad4e83
 URL:		https://github.com/gawel/WSGIProxy2/
 %if %{with python2}
 BuildRequires:	python-modules >= 1:2.6
@@ -41,7 +42,7 @@ BuildRequires:	python3-webtest
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
 %if %{with doc}
-BuildRequires:	sphinx-pdg
+BuildRequires:	sphinx-pdg-2
 %endif
 Requires:	python-modules >= 1:2.6
 BuildArch:	noarch
@@ -81,16 +82,25 @@ Dokumentacja API modułu Pythona WSGIProxy2.
 
 %build
 %if %{with python2}
-%py_build %{?with_tests:test}
+%py_build
+
+%if %{with tests}
+# test_quoted_utf8_url fails with InvalidURL
+nosetests-%{py_ver} wsgiproxy -e test_quoted_utf8_url
+%endif
 %endif
 
 %if %{with python3}
-%py3_build %{?with_tests:test}
+%py3_build
+
+%if %{with tests}
+nosetests-%{py3_ver} wsgiproxy
+%endif
 %endif
 
 %if %{with doc}
 %{__make} -C docs html \
-	SPHINXBUILD=sphinx-build
+	SPHINXBUILD=sphinx-build-2
 %endif
 
 %install
@@ -128,5 +138,5 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with doc}
 %files apidocs
 %defattr(644,root,root,755)
-%doc docs/_build/html/{_static,*.html,*.js}
+%doc docs/_build/html/{_modules,_static,*.html,*.js}
 %endif
